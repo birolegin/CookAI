@@ -74,10 +74,6 @@ const Page = () => {
         <View style={{ width: 20, height: 20 }} />
 
         <Button
-          onPress={() => route.push("/register")}
-          title="Hesabın yok mu? Kayıt ol"
-        />
-        <Button
           onPress={() => route.replace("/register")}
           title="Hesabın yok mu? Kayıt ol"
         />
