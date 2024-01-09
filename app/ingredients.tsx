@@ -1,7 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { GlobalContext } from '../context/GlobalState';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { ActivityIndicator } from 'react-native';
 import Button from '../components/customButton';
 
 interface Ingredient {
@@ -15,20 +17,30 @@ export interface RootState {
     };
 }
 
-const ingredients: Ingredient[] = [
-    { name: "Süt", image: "RESİM" },
-    { name: "Yumurta", image: "RESİM" },
-    { name: "Tavuk", image: "RESİM" },
-    { name: "Et", image: "RESİM" },
-    { name: "Domates", image: "RESİM" },
-    { name: "Biber", image: "RESİM" },
-    { name: "Soğan", image: "RESİM" },
-];
-
 export default function IngredientsScreen() {
     const { width } = useWindowDimensions();
     const { state, dispatch } = useContext(GlobalContext);
     const selectedIngredients = state.selectedIngredients;
+    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchIngredients = async () => {
+            setIsLoading(true);
+            const db = getFirestore();
+            const querySnapshot = await getDocs(collection(db, 'ingredients'));
+            const ingredients: Ingredient[] = [];
+
+            querySnapshot.forEach((doc) => {
+                ingredients.push(doc.data() as Ingredient);
+            });
+
+            setIngredients(ingredients);
+            setIsLoading(false);
+        };
+
+        fetchIngredients();
+    }, []);
 
     const handleIngredientSelection = (name: string) => {
         dispatch({ type: 'TOGGLE_INGREDIENT', payload: name });
@@ -53,18 +65,21 @@ export default function IngredientsScreen() {
 
     return (
         <View style={[styles.container, { width }]}>
-            <FlatList
-                data={ingredients}
-                renderItem={renderIngredientItem}
-                numColumns={2}
-                keyExtractor={(item) => item.name}
-                contentContainerStyle={{
-                    paddingHorizontal: 10,
-                    paddingVertical: 10,
-                    paddingBottom: 30,
-                }}
-            />
-
+            {isLoading ? (
+                <ActivityIndicator size="large" color="#000000" />
+            ) : (
+                <FlatList
+                    data={ingredients}
+                    renderItem={renderIngredientItem}
+                    numColumns={2}
+                    keyExtractor={(item) => item.name}
+                    contentContainerStyle={{
+                        paddingHorizontal: 10,
+                        paddingVertical: 10,
+                        paddingBottom: 30,
+                    }}
+                />
+            )}
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
         </View>
     );
