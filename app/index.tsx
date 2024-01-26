@@ -6,11 +6,20 @@ import {
   Alert,
   KeyboardAvoidingView,
 } from "react-native";
-
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  User,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithCredential,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from "@react-native-google-signin/google-signin";
 import Button from "../components/customButton";
 
 const Page = () => {
@@ -21,6 +30,12 @@ const Page = () => {
   const auth = FIREBASE_AUTH;
 
   useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        "892809679715-fenqeqgeco7297fiaphpejpon1j16s0a.apps.googleusercontent.com",
+      offlineAccess: true,
+    });
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         route.replace("/home");
@@ -42,6 +57,21 @@ const Page = () => {
       Alert.alert("Hata", "Giriş yapılamadı: " + error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const signInGoogle = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const googleUser: any = await GoogleSignin.signIn();
+      const googleCredential = GoogleAuthProvider.credential(
+        googleUser.idToken
+      );
+      const firebaseUser = await signInWithCredential(auth, googleCredential);
+      console.log(firebaseUser);
+      route.replace("/home");
+    } catch (error: any) {
+      console.error(error);
     }
   };
 
@@ -67,16 +97,26 @@ const Page = () => {
           onChangeText={(text) => setPassword(text)}
         />
 
-        <View style={{ width: 20, height: 20 }} />
+        <View style={styles.buttonContainer}>
+          <View style={{ width: 20, height: 20 }} />
 
-        <Button onPress={signIn} title="Giriş yap" />
+          <GoogleSigninButton
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={signInGoogle}
+          />
 
-        <View style={{ width: 20, height: 20 }} />
+          <View style={{ width: 20, height: 20 }} />
 
-        <Button
-          onPress={() => route.replace("/register")}
-          title="Hesabın yok mu? Kayıt ol"
-        />
+          <Button onPress={signIn} title="Giriş yap" />
+
+          <View style={{ width: 20, height: 20 }} />
+
+          <Button
+            onPress={() => route.replace("/register")}
+            title="Hesabın yok mu? Kayıt ol"
+          />
+        </View>
       </KeyboardAvoidingView>
     </View>
   );
@@ -89,6 +129,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     flex: 1,
     justifyContent: "center",
+  },
+  buttonContainer: {
+    marginHorizontal: 40,
   },
   title: {
     fontSize: 36,

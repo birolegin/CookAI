@@ -61,15 +61,17 @@ const Page = () => {
           onChangeText={(text) => setPassword(text)}
         />
 
-        <View style={{ width: 20, height: 20 }} />
+        <View style={styles.buttonContainer}>
+          <View style={{ width: 20, height: 20 }} />
 
-        <Button onPress={signUp} title="Kayıt Ol" />
+          <Button onPress={signUp} title="Kayıt Ol" />
 
-        <View style={{ width: 20, height: 20 }} />
+          <View style={{ width: 20, height: 20 }} />
 
-        <Button onPress={goBack} title="Geri dön." />
+          <Button onPress={goBack} title="Geri dön." />
 
-        <View style={{ width: 20, height: 20 }} />
+          <View style={{ width: 20, height: 20 }} />
+        </View>
       </KeyboardAvoidingView>
     </View>
   );
@@ -82,6 +84,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     flex: 1,
     justifyContent: "center",
+  },
+  buttonContainer: {
+    marginHorizontal: 40,
   },
   title: {
     fontSize: 36,
