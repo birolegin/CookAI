@@ -59,9 +59,7 @@ const RecipeDetailsScreen = () => {
         <StarRating
           maxStars={5}
           rating={userRating}
-          selectedStar={(rating: React.SetStateAction<number>) =>
-            setUserRating(rating)
-          }
+          selectedStar={(rating) => setUserRating(rating)}
           starSize={20}
           fullStarColor={"gold"}
         />
