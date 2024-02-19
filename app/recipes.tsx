@@ -37,7 +37,10 @@ export default function RecipesScreen() {
       const recipes: Recipe[] = [];
 
       for (let doc of querySnapshot.docs) {
-        const recipe = doc.data() as Recipe;
+        const recipe = {
+          id: doc.id,
+          ...doc.data(),
+        } as Recipe;
         const ratings: any = [];
         const ratingsSnapshot = await getDocs(collection(doc.ref, "ratings"));
         ratingsSnapshot.forEach((doc) => {

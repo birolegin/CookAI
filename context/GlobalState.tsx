@@ -10,6 +10,7 @@ export interface Comment {
 }
 
 export interface Recipe {
+  id: string;
   name: string;
   image: string;
   calories: number;
@@ -38,7 +39,22 @@ interface RecipeAction {
   payload: Recipe;
 }
 
-type Action = IngredientAction | RemoveIngredientAction | RecipeAction;
+interface UpdateRatingsAction {
+  type: "UPDATE_RATINGS";
+  payload: Rating[];
+}
+
+interface UpdateCommentsAction {
+  type: "UPDATE_COMMENTS";
+  payload: Comment[];
+}
+
+type Action =
+  | IngredientAction
+  | RemoveIngredientAction
+  | RecipeAction
+  | UpdateRatingsAction
+  | UpdateCommentsAction;
 
 interface ProviderProps {
   children: ReactNode;
@@ -86,6 +102,31 @@ const globalReducer = (state: State, action: Action): State => {
         selectedIngredients: [],
         selectedRecipe: null,
       };
+    case "UPDATE_RATINGS":
+      if (state.selectedRecipe) {
+        return {
+          ...state,
+          selectedRecipe: {
+            ...state.selectedRecipe,
+            ratings: action.payload,
+          },
+        };
+      } else {
+        return state;
+      }
+
+    case "UPDATE_COMMENTS":
+      if (state.selectedRecipe) {
+        return {
+          ...state,
+          selectedRecipe: {
+            ...state.selectedRecipe,
+            comments: action.payload,
+          },
+        };
+      } else {
+        return state;
+      }
     default:
       return state;
   }
