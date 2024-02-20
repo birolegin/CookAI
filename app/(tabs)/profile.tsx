@@ -1,13 +1,13 @@
-import { View, Text, StyleSheet, Modal, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { router, useRouter } from 'expo-router'
-import Button from '../../components/customButton'
-import { FIREBASE_AUTH } from '../../FirebaseConfig'
-import { signOut, sendPasswordResetEmail, updateProfile } from 'firebase/auth'
-import { TextInput } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import React, { useEffect, useState } from 'react';
+import { Modal } from 'react-native';
+import { Layout, Text, Input, Button, Card, Avatar, Modal as KittenModal } from '@ui-kitten/components';
+import { FIREBASE_AUTH } from '../../FirebaseConfig';
+import { signOut, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { getDoc, doc, updateDoc, onSnapshot, getFirestore, setDoc } from 'firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface UserDetails {
     height: string;
@@ -149,229 +149,87 @@ const Page = () => {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.profileContainer}>
-                <Image source={{ uri: user?.photoURL || '' }} style={styles.profileImage} />
-                <Text style={styles.welcomeText}>{displayName}</Text>
-            </View>
+        <Layout style={{ flex: 1, padding: 10 }}>
+            <ScrollView>
+                <Layout style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                    <Avatar source={{ uri: user?.photoURL || '' }} style={{ width: 75, height: 75, marginRight: 10 }} />
+                    <Text category='h5' style={{ flex: 1 }}>{displayName}</Text>
+                </Layout>
 
-            <View style={styles.infoContainer}>
-                <Text style={styles.sectionHeader}>Kullanıcı Bilgileri</Text>
-                <View style={styles.card}>
-                    <Text style={styles.cardTitle}>BOY</Text>
-                    <Text style={styles.cardText}>{userDetails?.height} cm</Text>
-                </View>
-                <View style={styles.card}>
-                    <Text style={styles.cardTitle}>KİLO</Text>
-                    <Text style={styles.cardText}>{userDetails?.weight} kg</Text>
-                </View>
-                <View style={styles.card}>
-                    <Text style={styles.cardTitle}>VKİ</Text>
-                    <Text style={styles.cardText}>{userDetails?.bmi} ({classifyBmi(userDetails?.bmi || '0')})</Text>
-                </View>
-                <View style={styles.card}>
-                    <Text style={styles.cardTitle}>Günlük alması gereken kalori miktarı</Text>
-                    <Text style={styles.cardText}>{userDetails?.dailyCalories} kalori</Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Button title="Bilgileri güncelle" onPress={openDetailsModal} />
-                </View>
-            </View>
+                <Layout style={{ padding: 20 }}>
+                    <Text category='h5' style={{ marginBottom: 10 }}>Kullanıcı Bilgileri</Text>
+                    <Card style={{ marginBottom: 10, padding: 10 }}>
+                        <Text category='h6'>BOY</Text>
+                        <Text>{userDetails?.height || "-"} cm</Text>
+                    </Card>
+                    <Card style={{ marginBottom: 10, padding: 10 }}>
+                        <Text category='h6'>KİLO</Text>
+                        <Text>{userDetails?.weight || "-"} kg</Text>
+                    </Card>
+                    <Card style={{ marginBottom: 10, padding: 10 }}>
+                        <Text category='h6'>VKİ</Text>
+                        <Text>{userDetails?.bmi || "-"} ({classifyBmi(userDetails?.bmi || '0')})</Text>
+                    </Card>
+                    <Card style={{ marginBottom: 10, padding: 10 }}>
+                        <Text category='h6'>Günlük alması gereken kalori miktarı</Text>
+                        <Text>{userDetails?.dailyCalories || "-"} kalori</Text>
+                    </Card>
+                    <Button style={{ marginVertical: 10 }} onPress={openDetailsModal}>Bilgileri güncelle</Button>
+                </Layout>
 
-            <Modal
-                animationType="slide"
-                visible={isDetailsModalVisible}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Bilgileri güncelle</Text>
-                        <TextInput
-                            style={styles.input}
+                <KittenModal visible={isDetailsModalVisible} backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <Card disabled>
+                        <Text category='h6'>Bilgileri güncelle</Text>
+                        <Input
                             value={height}
                             onChangeText={setHeight}
                             placeholder="Boy (cm)"
                             keyboardType="numeric"
                         />
-                        <TextInput
-                            style={styles.input}
+                        <Input
                             value={weight}
                             onChangeText={setWeight}
                             placeholder="Kilo (kg)"
                             keyboardType="numeric"
                         />
-                        <TextInput
-                            style={styles.input}
-                            value={dailyCalories}
+                        <Input value={dailyCalories}
                             onChangeText={setDailyCalories}
                             placeholder="Günlük kalori ihtiyacı"
                             keyboardType="numeric"
                         />
-                        <View style={styles.buttonContainer}>
-                            <Button title="Güncelle" onPress={updateUserDetails} />
-                        </View>
-                        <View style={styles.buttonContainer}>
-                            <Button title="Kapat" onPress={closeDetailsModal} />
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+                        <Button onPress={updateUserDetails}>Güncelle</Button>
+                        <Button onPress={closeDetailsModal}>Kapat</Button>
+                    </Card>
+                </KittenModal>
 
-            <View style={styles.buttonContainer}>
-                <Button title="Kaydedilen tarifler" onPress={() => router.push("/savedRecipes")} />
-                <View style={{ width: 20, height: 20 }} />
-                <Button title="Kullanıcı adı değiştir" onPress={openModal} />
-                <View style={{ width: 20, height: 20 }} />
-                <Button title="Şifre sıfırlama e-postası gönder" onPress={sendPasswordReset} />
-                <View style={{ width: 20, height: 20 }} />
-                <Button onPress={logOut} title='Çıkış Yap' />
-            </View>
-            <Modal
-                animationType="slide"
-                visible={isModalVisible}
-            >
-                <View style={styles.modalOverlay} >
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Kullanıcı adı değiştir</Text>
-                            <TextInput
-                                style={styles.input}
+                <Layout style={{ padding: 20, marginVertical: 10 }}>
+                    <Button style={{ marginVertical: 5 }} onPress={() => route.push("/savedRecipes")}>Kaydedilen tarifler</Button>
+                    <Button style={{ marginVertical: 5 }} onPress={openModal}>Kullanıcı adı değiştir</Button>
+                    <Button style={{ marginVertical: 5 }} onPress={sendPasswordReset}>Şifre sıfırlama e-postası gönder</Button>
+                    <Button style={{ marginVertical: 5 }} onPress={logOut}>Çıkış Yap</Button>
+                </Layout>
+
+                <KittenModal visible={isModalVisible} backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <Card disabled>
+                        <Layout style={{ padding: 10, marginVertical: 10 }}>
+                            <Text category='h6'>Kullanıcı adı değiştir</Text>
+                            <Layout style={{ marginVertical: 5 }}></Layout>
+                            <Input
                                 value={name}
                                 onChangeText={setName}
                                 placeholder="Kullanıcı adı girin."
                             />
-                            <View style={styles.buttonContainer}>
-                                <Button title="Kullanıcı adı ayarla" onPress={updateDisplayName} />
-                            </View>
-                            <View style={styles.buttonContainer}>
-                                <Button title="Kapat" onPress={closeModal} />
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-        </ScrollView>
+                            <Layout style={{ marginVertical: 5 }}></Layout>
+                            <Button onPress={updateDisplayName}>Kullanıcı adı ayarla</Button>
+                            <Layout style={{ marginVertical: 5 }}></Layout>
+                            <Button onPress={closeModal}>Kapat</Button>
+                        </Layout>
+                    </Card>
+
+                </KittenModal>
+            </ScrollView>
+        </Layout>
     );
 }
 
-export default Page
-
-const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        justifyContent: 'space-between',
-        paddingVertical: 20,
-        paddingHorizontal: 10
-    },
-    infoContainer: {
-        paddingHorizontal: 20,
-    },
-    title: {
-        fontSize: 36,
-        paddingBottom: 16,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    card: {
-        backgroundColor: '#f9f9f9',
-        borderRadius: 5,
-        padding: 20,
-        marginBottom: 20,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 1.41,
-        elevation: 2,
-    },
-    cardTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 5,
-    },
-    cardText: {
-        fontSize: 16,
-    },
-    buttonContainer: {
-        paddingHorizontal: 20,
-        marginBottom: 20,
-    },
-    input: {
-        height: 50,
-        borderColor: 'gray',
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 20,
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        marginTop: 22,
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    modalText: {
-        marginBottom: 15,
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    modalOverlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent black
-    },
-    welcomeContainer: {
-        backgroundColor: '#fff',
-        padding: 20,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginVertical: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        elevation: 3,
-    },
-    welcomeText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    sectionHeader: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 10,
-    },
-    profileContainer: {
-        backgroundColor: '#fff',
-        padding: 20,
-        borderRadius: 10,
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginVertical: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        elevation: 3,
-    },
-    profileImage: {
-        width: 75,
-        height: 75,
-        borderRadius: 50,
-    },
-});
+export default Page;

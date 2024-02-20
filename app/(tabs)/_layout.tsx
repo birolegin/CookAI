@@ -1,32 +1,45 @@
-import React from "react";
-import { Tabs } from "expo-router";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React from 'react'
+import { Tabs } from 'expo-router'
+import theme from '../../custom-theme.json'
 
 const Page = () => {
-  return (
-    <Tabs>
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: "Ana sayfa",
-          tabBarLabel: "Ana sayfa",
-          tabBarIcon: () => {
-            return <Ionicons name={"home-outline"} size={24}></Ionicons>;
-          },
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profil",
-          tabBarLabel: "Profil",
-          tabBarIcon: () => {
-            return <Ionicons name={"person-outline"} size={24}></Ionicons>;
-          },
-        }}
-      />
-    </Tabs>
-  );
-};
+    return (
+        <Tabs>
+            <Tabs.Screen
+                name='home'
+                options={{
+                    title: "Ana sayfa",
+                    tabBarLabel: "Ana sayfa",
+                    tabBarStyle: {
+                        backgroundColor: theme['color-basic-400'],
+                    },
+                    headerStyle: {
+                        backgroundColor: theme['color-basic-400'],
+                    },
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    },
+                }}
 
-export default Page;
+            />
+            <Tabs.Screen
+                name='profile'
+                options={{
+                    title: "Profil",
+                    tabBarLabel: "Profil",
+                    tabBarStyle: {
+                        backgroundColor: theme['color-basic-transparent-600'],
+                    },
+                    headerStyle: {
+                        backgroundColor: theme['color-basic-transparent-600'],
+                    },
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    },
+                }}
+            />
+        </Tabs>
+    )
+}
+
+export default Page

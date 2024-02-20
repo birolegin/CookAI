@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import { View, FlatList, Image, StyleSheet } from 'react-native';
 import { GlobalContext, Recipe } from '../context/GlobalState';
 import { getFirestore, doc, getDoc, onSnapshot, collection, getDocs } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { router } from 'expo-router'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Layout, Text } from '@ui-kitten/components';
 
 function shuffleArray(array: any[]) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -72,7 +73,7 @@ const SavedRecipesScreen = () => {
         </TouchableOpacity>
     );
     return (
-        <View style={styles.container}>
+        <Layout style={{ flex: 1 }}>
             {savedRecipes.length > 0 ? (
                 <FlatList
                     data={savedRecipes}
@@ -81,8 +82,8 @@ const SavedRecipesScreen = () => {
                 />
             ) : (
                 <>
-                    <Text style={styles.noRecipesText}>Kaydedilen tarif bulunamadı.</Text>
-                    <Text style={styles.suggestionsText}>Önerilenler</Text>
+                    <Text category='h6' style={{ textAlign: 'center', padding: 20 }}>Kaydedilen tarif bulunamadı.</Text>
+                    <Text category='h4' style={{ padding: 10 }}>Önerilenler</Text>
                     <FlatList
                         data={randomRecipes}
                         renderItem={renderSavedRecipeItem}
@@ -90,7 +91,7 @@ const SavedRecipesScreen = () => {
                     />
                 </>
             )}
-        </View>
+        </Layout>
     );
 };
 

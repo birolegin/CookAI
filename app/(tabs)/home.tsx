@@ -1,163 +1,133 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useContext } from "react";
-import { Link, useRouter } from "expo-router";
-import Button from "../../components/customButton";
-import { GlobalContext } from "../../context/GlobalState";
-import { Animated } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { router, useRouter } from "expo-router";
+import { GlobalContext, Recipe } from "../../context/GlobalState";
+import { Layout, Text, Card, Button, List } from "@ui-kitten/components";
 import {
-  RectButton,
-  ScrollView,
-  Swipeable,
-} from "react-native-gesture-handler";
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  query,
+} from "firebase/firestore";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Page = () => {
   const route = useRouter();
   const { state, dispatch } = useContext(GlobalContext);
   const selectedIngredients = state.selectedIngredients;
+  const [recipeOfTheMonth, setRecipeOfTheMonth] = useState<Recipe | null>(null);
+  const [loadingRecipe, setLoadingRecipe] = useState(true);
 
   const handleClearAll = () => {
     dispatch({ type: "CLEAR_ALL" });
   };
 
-  const handleRemoveIngredient = (index: any) => {
-    dispatch({ type: "REMOVE_INGREDIENT", payload: index });
-  };
+  useEffect(() => {
+    const fetchRecipeOfTheMonth = async () => {
+      try {
+        const db = getFirestore();
+        const recipeOfTheMonthQuery = query(collection(db, "recipeofthemonth"));
+        const querySnapshot = await getDocs(recipeOfTheMonthQuery);
 
-  const SwipeableRow = ({ children, handleSwipe }: any) => {
-    const renderRightActions = (progress: any, dragX: any) => {
-      const scale = dragX.interpolate({
-        inputRange: [-100, 0],
-        outputRange: [1, 0],
-        extrapolate: "clamp",
-      });
+        if (querySnapshot.empty) {
+          console.error("No documents found!");
+        } else {
+          const recipeOfTheMonthDoc = querySnapshot.docs[0];
+          const recipeId = recipeOfTheMonthDoc.data().recipeId;
 
-      return (
-        <RectButton style={styles.rightAction} onPress={handleSwipe}>
-          <Animated.Text
-            style={[
-              styles.actionText,
-              {
-                transform: [{ scale }],
-              },
-            ]}
-          >
-            Listeden kaldırmak için dokun.
-          </Animated.Text>
-        </RectButton>
-      );
+          const recipeRef = doc(db, "recipes", recipeId);
+          const recipeDoc = await getDoc(recipeRef);
+          const recipeData = recipeDoc.data();
+
+          if (recipeData) {
+            setRecipeOfTheMonth({ id: recipeId, ...recipeData } as Recipe);
+          } else {
+            console.error("No data in document!");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching recipe of the month:", error);
+      } finally {
+        setLoadingRecipe(false);
+      }
     };
+    fetchRecipeOfTheMonth();
+  }, []);
 
-    return (
-      <Swipeable renderRightActions={renderRightActions}>{children}</Swipeable>
-    );
+  const handleSelectRecipe = () => {
+    if (recipeOfTheMonth) {
+      dispatch({ type: "SELECT_RECIPE", payload: recipeOfTheMonth });
+      router.push("/recipeDetails");
+    } else {
+      console.error("Recipe of the month is not available");
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Ana Sayfa</Text>
+    <Layout style={{ flex: 1, padding: 10 }}>
+      <Layout style={{ flex: 1, justifyContent: "center" }}>
+        <Text category="h1" style={{ padding: 10, textAlign: "center" }}>
+          CookAI
+        </Text>
 
-      <View style={styles.ingredientsCard}>
-        <ScrollView>
+        {loadingRecipe ? (
+          <Text>Ayın tarifi yükleniyor...</Text>
+        ) : (
+          <Layout>
+            {recipeOfTheMonth ? (
+              <Card header={<Text category="h5">Ayın Tarifi</Text>}>
+                <Text category="h5" style={{ padding: 5 }}>
+                  {recipeOfTheMonth.name}
+                </Text>
+                <Button onPress={handleSelectRecipe}>Tarife git</Button>
+              </Card>
+            ) : (
+              <Text>Ayın tarifi bulunamadı.</Text>
+            )}
+          </Layout>
+        )}
+      </Layout>
+
+      <Layout style={{ flex: 2, justifyContent: "flex-end" }}>
+        <Card style={{ maxHeight: 250, marginVertical: 15 }}>
           {selectedIngredients.length > 0 ? (
             selectedIngredients.map((ingredient, index) => (
-              <SwipeableRow
-                key={index}
-                handleSwipe={() => handleRemoveIngredient(index)}
-              >
-                <Text style={styles.ingredients}>{ingredient}</Text>
-              </SwipeableRow>
+              <Text category="h6" key={index}>
+                {ingredient}
+              </Text>
             ))
           ) : (
-            <Text style={styles.ingredients}>Malzeme seçmediniz.</Text>
+            <Text category="h6">Malzeme seçmediniz.</Text>
           )}
-        </ScrollView>
-      </View>
+        </Card>
 
-      <View style={styles.buttonContainer}>
-        <Link href="/ingredients" asChild>
-          <Button
-            title="Malzemeleri seç"
-            style={{ backgroundColor: "green" }}
-          />
-        </Link>
-        <View style={{ width: 20, height: 20 }} />
-        {selectedIngredients.length > 0 ? (
-          <Link href={"/recipes"} asChild>
-            <Button
-              title="Tarif bul"
-              disabled={selectedIngredients.length === 0}
-              style={{ backgroundColor: "blue" }}
-            />
-          </Link>
-        ) : (
-          <Button
-            title="Tarif bul"
-            disabled={selectedIngredients.length === 0}
-            disabledStyle={{ backgroundColor: "gray" }}
-          />
-        )}
-        <View style={{ width: 20, height: 20 }} />
         <Button
-          title="Seçimleri temizle"
-          onPress={handleClearAll}
-          style={{ backgroundColor: "red" }}
-        />
-      </View>
-    </View>
+          style={{ marginVertical: 5 }}
+          onPress={() => route.push("/ingredients")}
+        >
+          Malzemeleri seç
+        </Button>
+
+        {selectedIngredients.length > 0 ? (
+          <Button
+            style={{ marginVertical: 5 }}
+            onPress={() => route.push("/recipes")}
+          >
+            Tarif bul
+          </Button>
+        ) : (
+          <Button style={{ marginVertical: 5 }} disabled>
+            Tarif bul
+          </Button>
+        )}
+
+        <Button style={{ marginVertical: 5 }} onPress={handleClearAll}>
+          Seçimleri temizle
+        </Button>
+      </Layout>
+    </Layout>
   );
 };
 
 export default Page;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "#f2f2f2",
-  },
-  title: {
-    fontSize: 36,
-    paddingBottom: 16,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: "#333",
-  },
-  ingredientsCard: {
-    maxHeight: 250,
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
-  },
-  ingredients: {
-    fontSize: 16,
-    textAlign: "left",
-    padding: 10,
-    backgroundColor: "#f8f8f8",
-    marginVertical: 5,
-    borderRadius: 5,
-  },
-  rightAction: {
-    backgroundColor: "#dd2c00",
-    justifyContent: "center",
-    alignItems: "flex-end",
-    flex: 1,
-    marginVertical: 5,
-    borderRadius: 5,
-  },
-  actionText: {
-    color: "#fff",
-    fontWeight: "600",
-    padding: 20,
-  },
-  buttonContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-});

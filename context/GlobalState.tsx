@@ -15,6 +15,7 @@ export interface Recipe {
   image: string;
   calories: number;
   cookTime: number;
+  steps: string[];
   ratings: Rating[];
   comments: Comment[];
 }

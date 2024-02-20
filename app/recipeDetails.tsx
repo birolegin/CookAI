@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Image, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { GlobalContext } from '../context/GlobalState';
 import StarRating from 'react-native-star-rating';
 import { TextInput } from 'react-native-gesture-handler';
-import Button from '../components/customButton';
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { Button, Card, Input, Layout, Text } from '@ui-kitten/components';
 
 const RecipeDetailsScreen = () => {
     const { state, dispatch } = useContext(GlobalContext);
@@ -140,54 +140,61 @@ const RecipeDetailsScreen = () => {
     }, [selectedRecipe.id]);
 
     return (
-        <ScrollView style={styles.container}>
-            <Image source={{ uri: selectedRecipe.image }} style={styles.recipeImage} />
-            <View style={styles.detailsContainer}>
-                <Text style={styles.recipeName}>{selectedRecipe.name}</Text>
-                <Text style={styles.recipeCalories}>Kalori: {selectedRecipe.calories}</Text>
-                <Text style={styles.recipeCookTime}>Pişirme süresi: {selectedRecipe.cookTime} dakika</Text>
-                <Button title={isSaved ? "Tarifi kaydedilenlerden kaldır" : "Tarifi kaydet"} onPress={saveRecipe} />
-                <Text style={styles.headerText}>Derecelendirme</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={averageRating}
-                    starSize={20}
-                    fullStarColor={'gold'}
-                />
-                <Text style={styles.headerText}>Yorumlar</Text>
-                {selectedRecipe.comments && selectedRecipe.comments.slice(-numberOfCommentsToShow).map((comment, index) => (
-                    <View key={index} style={styles.commentContainer}>
-                        <Text style={styles.commentUsername}>{comment.username}</Text>
-                        <Text style={styles.commentText}>{comment.comment}</Text>
-                    </View>
-                ))}
-                <Text style={styles.headerText}>Tarifi değerlendir</Text>
-                <StarRating
-                    maxStars={5}
-                    rating={userRating}
-                    selectedStar={(rating) => setUserRating(rating)}
-                    starSize={20}
-                    fullStarColor={'gold'}
-                />
-                <Text style={styles.headerText2}></Text>
-                <TextInput
-                    style={styles.inputField}
-                    value={userComment}
-                    onChangeText={(text) => setUserComment(text)}
-                    placeholder="Yorumunuz"
-                />
-                <Button title="Yorumu gönder" onPress={handleSubmit} />
-            </View>
-            <View style={{ width: 20, height: 50 }} />
-        </ScrollView>
+        <Layout style={{ flex: 1 }}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ flex: 1 }}
+            >
+                <ScrollView style={styles.container}>
+                    <Image source={{ uri: selectedRecipe.image }} style={{ width: '100%', height: 200, resizeMode: 'cover' }} />
+                    <Layout style={{ padding: 15 }}>
+                        <Text category='h3' style={{ marginBottom: 10 }}>{selectedRecipe.name}</Text>
+                        <StarRating
+                            disabled={true}
+                            maxStars={5}
+                            rating={averageRating}
+                            starSize={20}
+                            fullStarColor={'gold'}
+                        />
+                        <Text style={{ marginBottom: 5 }}>Kalori: {selectedRecipe.calories}</Text>
+                        <Text style={{ marginBottom: 20 }}>Pişirme süresi: {selectedRecipe.cookTime} dakika</Text>
+                        <Button style={{ marginBottom: 10 }} onPress={saveRecipe}>{isSaved ? "Tarifi kaydedilenlerden kaldır" : "Tarifi kaydet"}</Button>
+                        <Text category='h5' style={{ marginTop: 20, marginBottom: 10 }}>Adımlar</Text>
+                        {selectedRecipe.steps && selectedRecipe.steps.map((instruction, index) => (
+                            <Text key={index} style={{ marginBottom: 10 }}>{instruction}</Text>
+                        ))}
+                        <Text category='h5' style={{ marginTop: 20, marginBottom: 10 }}>Tarifi değerlendir</Text>
+                        <StarRating
+                            maxStars={5}
+                            rating={userRating}
+                            selectedStar={(rating) => setUserRating(rating)}
+                            starSize={20}
+                            fullStarColor={'gold'}
+                        />
+                        <Input
+                            style={{ marginVertical: 10 }}
+                            value={userComment}
+                            onChangeText={(text) => setUserComment(text)}
+                            placeholder="Yorumunuz"
+                        />
+                        <Button onPress={handleSubmit}>Yorumu gönder</Button>
+                        <Text category='h5' style={{ marginTop: 20, marginBottom: 10 }}>Yorumlar</Text>
+                        {selectedRecipe.comments && selectedRecipe.comments.slice(-numberOfCommentsToShow).map((comment, index) => (
+                            <Layout key={index} style={{ borderBottomWidth: 1, borderBottomColor: '#ddd', paddingVertical: 10 }}>
+                                <Text category='h6'>{comment.username}</Text>
+                                <Text>{comment.comment}</Text>
+                            </Layout>
+                        ))}
+                    </Layout>
+                </ScrollView>
+            </KeyboardAvoidingView>
+        </Layout>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f2f2f2',
     },
     recipeImage: {
         width: '100%',
