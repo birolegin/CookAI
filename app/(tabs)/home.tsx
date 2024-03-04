@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { RootState } from "../ingredients";
 import { router, useRouter } from "expo-router";
 import { GlobalContext, Recipe } from "../../context/GlobalState";
 import { Layout, Text, Card, Button, List } from "@ui-kitten/components";
@@ -65,16 +66,16 @@ const Page = () => {
   };
 
   return (
-    <Layout style={{ flex: 1, padding: 10 }}>
-      <Layout style={{ flex: 1, justifyContent: "center" }}>
-        <Text category="h1" style={{ padding: 10, textAlign: "center" }}>
+    <Layout style={{ flex: 1, padding: 10 , backgroundColor: "#FFE7AF"}}>
+      <Layout style={{ flex: 1, justifyContent: "center", backgroundColor: "#FFE7AF"}}>
+        <Text category="h1" style={{ padding: 10, textAlign: "center"}}>
           CookAI
         </Text>
 
         {loadingRecipe ? (
           <Text>Ayın tarifi yükleniyor...</Text>
         ) : (
-          <Layout>
+          <Layout style={{backgroundColor: "#FFE7AF"}}>
             {recipeOfTheMonth ? (
               <Card header={<Text category="h5">Ayın Tarifi</Text>}>
                 <Text category="h5" style={{ padding: 5 }}>
@@ -89,8 +90,8 @@ const Page = () => {
         )}
       </Layout>
 
-      <Layout style={{ flex: 2, justifyContent: "flex-end" }}>
-        <Card style={{ maxHeight: 250, marginVertical: 15 }}>
+      <Layout style={{ flex: 2, justifyContent: "flex-end", backgroundColor: "#FFE7AF"}}>
+        <Card style={{ maxHeight: 250, marginVertical: 15, backgroundColor: "#FFE7AF", borderBlockColor:"black"}}>
           {selectedIngredients.length > 0 ? (
             selectedIngredients.map((ingredient, index) => (
               <Text category="h6" key={index}>
@@ -98,12 +99,12 @@ const Page = () => {
               </Text>
             ))
           ) : (
-            <Text category="h6">Malzeme seçmediniz.</Text>
+            <Text category="h6" style={{backgroundColor: "#FFE7AF"}}>Malzeme seçmediniz.</Text>
           )}
         </Card>
 
         <Button
-          style={{ marginVertical: 5 }}
+          style={{ marginVertical: 5, backgroundColor: "black"}}
           onPress={() => route.push("/ingredients")}
         >
           Malzemeleri seç
@@ -111,7 +112,7 @@ const Page = () => {
 
         {selectedIngredients.length > 0 ? (
           <Button
-            style={{ marginVertical: 5 }}
+            style={{ marginVertical: 5 , backgroundColor: "black"}}
             onPress={() => route.push("/recipes")}
           >
             Tarif bul
@@ -122,7 +123,7 @@ const Page = () => {
           </Button>
         )}
 
-        <Button style={{ marginVertical: 5 }} onPress={handleClearAll}>
+        <Button style={{ marginVertical: 5 , backgroundColor: "black"}} onPress={handleClearAll}>
           Seçimleri temizle
         </Button>
       </Layout>

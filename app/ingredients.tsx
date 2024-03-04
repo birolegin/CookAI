@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useContext, useEffect, useState } from 'react';
-import { FlatList, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { FlatList, Image, ImageBackground, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { GlobalContext } from '../context/GlobalState';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { ActivityIndicator } from 'react-native';
@@ -70,7 +70,7 @@ export default function IngredientsScreen() {
     return (
         <Layout style={{ flex: 1, padding: 10 }}>
             {isLoading ? (
-                <ActivityIndicator size="large" color="#FFAC7C" />
+                <ActivityIndicator size="large" color="#FFE7AF" />
             ) : (
                 <Layout style={{ flex: 1 }}>
                     <Input
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         borderRadius: 10,
-        backgroundColor: '#D4D4D4',
+        backgroundColor: 'white',
         margin: 5,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     selectedIngredientItem: {
-        backgroundColor: '#FFD6E9',
+        backgroundColor: '#FFE7AF',
     },
     listContent: {
         paddingHorizontal: 10,

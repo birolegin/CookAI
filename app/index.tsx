@@ -4,6 +4,7 @@ import {
   TextInput,
   Alert,
   KeyboardAvoidingView,
+  Image,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { router, useRouter } from "expo-router";
@@ -75,9 +76,29 @@ const Page = () => {
   };
 
   return (
-    <Layout style={{ flex: 1, justifyContent: "center", padding: 20 }}>
+    <Layout
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        padding: 20,
+        backgroundColor: "#FFE7AF",
+      }}
+    >
       <KeyboardAvoidingView behavior="padding">
-        <Text category="h1">CookAI</Text>
+        <Image
+          source={{
+            uri: "https://cdn.pixabay.com/photo/2023/08/05/15/52/ai-generated-8171361_1280.png",
+          }}
+          style={{
+            width: 370,
+            height: 370,
+            resizeMode: "center",
+            alignItems: "center",
+          }}
+        />
+        <Text category="h1" style={{ textAlign: "center" }}>
+          CookAI
+        </Text>
 
         <Input
           value={email}
@@ -98,18 +119,25 @@ const Page = () => {
 
         <GoogleSigninButton
           size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
+          color={GoogleSigninButton.Color.Light}
           onPress={signInGoogle}
-          style={{ marginTop: 16 }}
+          style={{
+            marginTop: 16,
+            alignSelf: "center",
+            backgroundColor: "black",
+          }}
         />
 
-        <Button onPress={signIn} style={{ marginTop: 16 }}>
+        <Button
+          onPress={signIn}
+          style={{ marginTop: 16, backgroundColor: "black" }}
+        >
           Giriş yap
         </Button>
 
         <Button
           onPress={() => route.replace("/register")}
-          style={{ marginTop: 16 }}
+          style={{ marginTop: 16, backgroundColor: "black" }}
         >
           Hesabın yok mu? Kayıt ol
         </Button>

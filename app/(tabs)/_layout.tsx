@@ -1,6 +1,8 @@
 import React from "react";
 import { Tabs } from "expo-router";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import theme from "../../custom-theme.json";
+
 
 const Page = () => {
   return (
@@ -10,11 +12,14 @@ const Page = () => {
         options={{
           title: "Ana sayfa",
           tabBarLabel: "Ana sayfa",
+          tabBarIcon: () => {
+            return <Ionicons name={"home-outline"} size={24}></Ionicons>;
+          },
           tabBarStyle: {
-            backgroundColor: theme["color-primary-100"],
+            backgroundColor: theme["color-basic-400"],
           },
           headerStyle: {
-            backgroundColor: theme["color-primary-100"],
+            backgroundColor: theme["color-basic-400"],
           },
           headerTitleStyle: {
             fontWeight: "bold",
@@ -26,11 +31,14 @@ const Page = () => {
         options={{
           title: "Profil",
           tabBarLabel: "Profil",
+          tabBarIcon: () => {
+            return <Ionicons name={"person-outline"} size={24}></Ionicons>;
+          },
           tabBarStyle: {
-            backgroundColor: theme["color-basic-transparent-600"],
+            backgroundColor: "#FFE7AF"
           },
           headerStyle: {
-            backgroundColor: theme["color-basic-transparent-600"],
+            backgroundColor: "#FFE7AF"
           },
           headerTitleStyle: {
             fontWeight: "bold",

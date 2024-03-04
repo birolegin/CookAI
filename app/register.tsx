@@ -31,7 +31,7 @@ const Page = () => {
         route.replace("/")
     }
     return (
-        <Layout style={{ flex: 1, padding: 10, justifyContent: 'center' }}>
+        <Layout style={{ flex: 1, padding: 10, justifyContent: 'center' , backgroundColor : '#FFE7AF'}}>
             <KeyboardAvoidingView behavior='padding'>
                 <Text category='h3' style={{ padding: 10 }}>CookAI</Text>
 
@@ -55,8 +55,8 @@ const Page = () => {
                 />
 
                 <Layout style={styles.buttonContainer}>
-                    <Button style={{ marginVertical: 10 }} onPress={signUp}>Kayıt Ol</Button>
-                    <Button style={{ marginVertical: 10 }} onPress={goBack}>Geri dön.</Button>
+                    <Button style={{ marginVertical: 10 , backgroundColor: "black"}} onPress={signUp}>Kayıt Ol</Button>
+                    <Button style={{ marginVertical: 10 , backgroundColor: "black"}} onPress={goBack}>Geri dön.</Button>
                 </Layout>
             </KeyboardAvoidingView>
         </Layout>
@@ -72,7 +72,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonContainer: {
-        marginHorizontal: 40
+        marginHorizontal: 40,
+        backgroundColor: "#FFE7AF"
+        
     },
     title: {
         fontSize: 36,

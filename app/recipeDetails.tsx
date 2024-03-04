@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState} from 'react';
 import { View, Image, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { GlobalContext } from '../context/GlobalState';
 import StarRating from 'react-native-star-rating';
@@ -6,6 +6,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { Button, Card, Input, Layout, Text } from '@ui-kitten/components';
+
 
 const RecipeDetailsScreen = () => {
     const { state, dispatch } = useContext(GlobalContext);
@@ -158,7 +159,7 @@ const RecipeDetailsScreen = () => {
                         />
                         <Text style={{ marginBottom: 5 }}>Kalori: {selectedRecipe.calories}</Text>
                         <Text style={{ marginBottom: 20 }}>Pişirme süresi: {selectedRecipe.cookTime} dakika</Text>
-                        <Button style={{ marginBottom: 10 }} onPress={saveRecipe}>{isSaved ? "Tarifi kaydedilenlerden kaldır" : "Tarifi kaydet"}</Button>
+                        <Button style={{ marginBottom: 10, backgroundColor:"black" }} onPress={saveRecipe}>{isSaved ? "Tarifi kaydedilenlerden kaldır" : "Tarifi kaydet"}</Button>
                         <Text category='h5' style={{ marginTop: 20, marginBottom: 10 }}>Adımlar</Text>
                         {selectedRecipe.steps && selectedRecipe.steps.map((instruction, index) => (
                             <Text key={index} style={{ marginBottom: 10 }}>{instruction}</Text>
@@ -177,7 +178,7 @@ const RecipeDetailsScreen = () => {
                             onChangeText={(text) => setUserComment(text)}
                             placeholder="Yorumunuz"
                         />
-                        <Button onPress={handleSubmit}>Yorumu gönder</Button>
+                        <Button style={{ marginBottom: 10, backgroundColor:"black"}} onPress={handleSubmit}>Yorumu gönder</Button>
                         <Text category='h5' style={{ marginTop: 20, marginBottom: 10 }}>Yorumlar</Text>
                         {selectedRecipe.comments && selectedRecipe.comments.slice(-numberOfCommentsToShow).map((comment, index) => (
                             <Layout key={index} style={{ borderBottomWidth: 1, borderBottomColor: '#ddd', paddingVertical: 10 }}>

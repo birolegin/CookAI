@@ -18,6 +18,8 @@ export interface Recipe {
   steps: string[];
   ratings: Rating[];
   comments: Comment[];
+  matchedIngredients: any;
+  ingredients: string[];
 }
 
 interface State {
