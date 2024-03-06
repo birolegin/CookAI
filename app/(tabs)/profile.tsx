@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-native";
+import { Modal, View } from "react-native";
 import {
   Layout,
   Text,
@@ -8,6 +8,7 @@ import {
   Card,
   Avatar,
   Modal as KittenModal,
+  Icon,
 } from "@ui-kitten/components";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import { signOut, sendPasswordResetEmail, updateProfile } from "firebase/auth";
@@ -23,6 +24,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface UserDetails {
   height: string;
@@ -199,7 +202,14 @@ const Page = () => {
               backgroundColor: "#FFE7AF",
             }}
           >
+            <MaterialCommunityIcons
+              name="human-male-height"
+              size={32}
+              color="black"
+            />
+
             <Text category="h6">BOY</Text>
+
             <Text>{userDetails?.height || "-"} cm</Text>
           </Card>
           <Card
@@ -210,6 +220,11 @@ const Page = () => {
               borderTopColor: "black",
             }}
           >
+            <MaterialCommunityIcons
+              name="weight-kilogram"
+              size={32}
+              color="black"
+            />
             <Text category="h6">KİLO</Text>
             <Text>{userDetails?.weight || "-"} kg</Text>
           </Card>
@@ -221,6 +236,7 @@ const Page = () => {
               borderTopColor: "black",
             }}
           >
+            <MaterialCommunityIcons name="human" size={32} color="black" />
             <Text category="h6">VKİ</Text>
             <Text>
               {userDetails?.bmi || "-"} ({classifyBmi(userDetails?.bmi || "0")})
@@ -234,6 +250,7 @@ const Page = () => {
               borderBlockColor: "black",
             }}
           >
+            <MaterialCommunityIcons name="food" size={32} color="black" />
             <Text category="h6">Günlük alması gereken kalori miktarı</Text>
             <Text>{userDetails?.dailyCalories || "-"} kalori</Text>
           </Card>

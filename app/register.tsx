@@ -53,13 +53,16 @@ const Page = () => {
                     autoCapitalize='none'
                     onChangeText={(text) => setPassword(text)}
                 />
+                
 
                 <Layout style={styles.buttonContainer}>
                     <Button style={{ marginVertical: 10 , backgroundColor: "black"}} onPress={signUp}>Kayıt Ol</Button>
                     <Button style={{ marginVertical: 10 , backgroundColor: "black"}} onPress={goBack}>Geri dön.</Button>
                 </Layout>
             </KeyboardAvoidingView>
+            
         </Layout>
+        
     )
 }
 

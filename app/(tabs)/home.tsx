@@ -12,6 +12,7 @@ import {
   query,
 } from "firebase/firestore";
 import { ScrollView } from "react-native-gesture-handler";
+import { Image, View } from "react-native";
 
 const Page = () => {
   const route = useRouter();
@@ -66,23 +67,53 @@ const Page = () => {
   };
 
   return (
-    <Layout style={{ flex: 1, padding: 10 , backgroundColor: "#FFE7AF"}}>
-      <Layout style={{ flex: 1, justifyContent: "center", backgroundColor: "#FFE7AF"}}>
-        <Text category="h1" style={{ padding: 10, textAlign: "center"}}>
-          CookAI
+    <Layout
+      style={{
+        flex: 1,
+        padding: 10,
+        backgroundColor: "#FFE7AF",
+        marginTop: -150,
+      }}
+    >
+      <Layout
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          backgroundColor: "#FFE7AF",
+        }}
+      >
+        <Text category="h1" style={{ padding: 10, textAlign: "center" }}>
+          Cook AI
         </Text>
 
         {loadingRecipe ? (
           <Text>Ayın tarifi yükleniyor...</Text>
         ) : (
-          <Layout style={{backgroundColor: "#FFE7AF"}}>
+          <Layout style={{ backgroundColor: "#FFE7AF" }}>
             {recipeOfTheMonth ? (
-              <Card header={<Text category="h5">Ayın Tarifi</Text>}>
-                <Text category="h5" style={{ padding: 5 }}>
+              <View
+                style={{
+                  backgroundColor: "#FFE7AF",
+                }} /*header={<Text category="h5">Ayın Tarifi</Text>}*/
+              >
+                <Text category="h5">Ayın Tarifi</Text>
+                <Text category="h5" style={{ padding: 0 }}>
                   {recipeOfTheMonth.name}
                 </Text>
-                <Button onPress={handleSelectRecipe}>Tarife git</Button>
-              </Card>
+
+                <Image
+                  source={{
+                    uri: "https://evdekilerle.com/img/Kad%C4%B1nbudu%20K%C3%B6fte.jpg",
+                  }}
+                  style={{ width: "100%", height: 200, resizeMode: "cover" }}
+                />
+                <Button
+                  style={{ backgroundColor: "black" }}
+                  onPress={handleSelectRecipe}
+                >
+                  Tarife git
+                </Button>
+              </View>
             ) : (
               <Text>Ayın tarifi bulunamadı.</Text>
             )}
@@ -90,8 +121,22 @@ const Page = () => {
         )}
       </Layout>
 
-      <Layout style={{ flex: 2, justifyContent: "flex-end", backgroundColor: "#FFE7AF"}}>
-        <Card style={{ maxHeight: 250, marginVertical: 15, backgroundColor: "#FFE7AF", borderBlockColor:"black"}}>
+      <Layout
+        style={{
+          flex: 2,
+          justifyContent: "flex-end",
+          backgroundColor: "#FFE7AF",
+          maxHeight: 200,
+        }}
+      >
+        <View
+          style={{
+            minHeight: 100,
+            marginVertical: 15,
+            backgroundColor: "#FFE7AF",
+            borderBlockColor: "black",
+          }}
+        >
           {selectedIngredients.length > 0 ? (
             selectedIngredients.map((ingredient, index) => (
               <Text category="h6" key={index}>
@@ -99,12 +144,14 @@ const Page = () => {
               </Text>
             ))
           ) : (
-            <Text category="h6" style={{backgroundColor: "#FFE7AF"}}>Malzeme seçmediniz.</Text>
+            <Text category="h6" style={{ backgroundColor: "#FFE7AF" }}>
+              Malzeme seçmediniz.
+            </Text>
           )}
-        </Card>
+        </View>
 
         <Button
-          style={{ marginVertical: 5, backgroundColor: "black"}}
+          style={{ marginVertical: 5, backgroundColor: "black" }}
           onPress={() => route.push("/ingredients")}
         >
           Malzemeleri seç
@@ -112,7 +159,7 @@ const Page = () => {
 
         {selectedIngredients.length > 0 ? (
           <Button
-            style={{ marginVertical: 5 , backgroundColor: "black"}}
+            style={{ marginVertical: 5, backgroundColor: "black" }}
             onPress={() => route.push("/recipes")}
           >
             Tarif bul
@@ -123,7 +170,10 @@ const Page = () => {
           </Button>
         )}
 
-        <Button style={{ marginVertical: 5 , backgroundColor: "black"}} onPress={handleClearAll}>
+        <Button
+          style={{ marginVertical: 5, backgroundColor: "black" }}
+          onPress={handleClearAll}
+        >
           Seçimleri temizle
         </Button>
       </Layout>
