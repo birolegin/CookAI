@@ -1,3 +1,5 @@
+import { isDevelopmentBuild } from "expo-dev-client";
+
 export default {
 	expo: {
 		name: "CookAI",

@@ -21,6 +21,8 @@ import {
   GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
 import { Layout, Text, Input, Button, Card } from "@ui-kitten/components";
+import { LogBox } from "react-native"
+
 
 const Page = () => {
   const route = useRouter();
@@ -74,6 +76,8 @@ const Page = () => {
       console.error(error);
     }
   };
+  
+  LogBox.ignoreAllLogs(true)
 
   return (
     <Layout
