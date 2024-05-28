@@ -87,14 +87,14 @@ const Page = () => {
         </Text>
 
         {loadingRecipe ? (
-          <Text>Ayın tarifi yükleniyor...</Text>
+          <Text >Ayın tarifi yükleniyor...</Text>
         ) : (
           <Layout style={{ backgroundColor: "#FFE7AF" }}>
             {recipeOfTheMonth ? (
               <View
                 style={{
                   backgroundColor: "#FFE7AF",
-                }} /*header={<Text category="h5">Ayın Tarifi</Text>}*/
+                }} /*header={<Text  category="h5">Ayın Tarifi</Text>}*/
               >
                 <Text category="h5">Ayın Tarifi</Text>
                 <Text category="h5" style={{ padding: 0 }}>
@@ -115,7 +115,7 @@ const Page = () => {
                 </Button>
               </View>
             ) : (
-              <Text>Ayın tarifi bulunamadı.</Text>
+              <Text >Ayın tarifi bulunamadı.</Text>
             )}
           </Layout>
         )}

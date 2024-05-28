@@ -4,8 +4,6 @@ import { GlobalProvider } from "../context/GlobalState";
 import * as eva from "@eva-design/eva";
 import {
   ApplicationProvider,
-  Layout as UILayout,
-  Button,
 } from "@ui-kitten/components";
 import { default as theme } from "../custom-theme.json";
 

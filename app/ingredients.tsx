@@ -4,7 +4,6 @@ import { FlatList, Image, ImageBackground, Platform, StyleSheet, Text, TextInput
 import { GlobalContext } from '../context/GlobalState';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { ActivityIndicator } from 'react-native';
-import Button from '../components/customButton';
 import { Avatar, Card, Input, Layout, List, ListItem } from '@ui-kitten/components';
 import { Dimensions } from 'react-native';
 

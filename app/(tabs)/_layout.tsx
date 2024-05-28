@@ -27,6 +27,25 @@ const Page = () => {
         }}
       />
       <Tabs.Screen
+        name="ai"
+        options={{
+          title: "AI",
+          tabBarLabel: "AI",
+          tabBarIcon: () => {
+            return <Ionicons name={"camera-outline"} size={24}></Ionicons>;
+          },
+          tabBarStyle: {
+            backgroundColor: theme["color-basic-400"],
+          },
+          headerStyle: {
+            backgroundColor: theme["color-basic-400"],
+          },
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           title: "Profil",

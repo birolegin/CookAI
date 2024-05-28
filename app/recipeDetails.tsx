@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Image, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { GlobalContext } from '../context/GlobalState';
-import StarRating from 'react-native-star-rating';
 import { TextInput } from 'react-native-gesture-handler';
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
@@ -20,7 +19,7 @@ const RecipeDetailsScreen = () => {
     if (!selectedRecipe) {
         return (
             <View style={styles.container}>
-                <Text>Tarif seçmediniz</Text>
+                <Text >Tarif seçmediniz</Text>
             </View>
         );
     }
@@ -150,40 +149,28 @@ const RecipeDetailsScreen = () => {
                     <Image source={{ uri: selectedRecipe.image }} style={{ width: '100%', height: 200, resizeMode: 'cover' }} />
                     <Layout style={{ padding: 15 }}>
                         <Text category='h3' style={{ marginBottom: 10 }}>{selectedRecipe.name}</Text>
-                        <StarRating
-                            disabled={true}
-                            maxStars={5}
-                            rating={averageRating}
-                            starSize={20}
-                            fullStarColor={'gold'}
-                        />
+                        
                         <Text style={{ marginBottom: 5 }}>Kalori: {selectedRecipe.calories}</Text>
                         <Text style={{ marginBottom: 20 }}>Pişirme süresi: {selectedRecipe.cookTime} dakika</Text>
-                        <Button style={{ marginBottom: 10, backgroundColor:"black" }} onPress={saveRecipe}>{isSaved ? "Tarifi kaydedilenlerden kaldır" : "Tarifi kaydet"}</Button>
+                        <Button style={{ marginBottom: 10, backgroundColor: "black" }} onPress={saveRecipe}>{isSaved ? "Tarifi kaydedilenlerden kaldır" : "Tarifi kaydet"}</Button>
                         <Text category='h5' style={{ marginTop: 20, marginBottom: 10 }}>Adımlar</Text>
                         {selectedRecipe.steps && selectedRecipe.steps.map((instruction, index) => (
                             <Text key={index} style={{ marginBottom: 10 }}>{instruction}</Text>
                         ))}
                         <Text category='h5' style={{ marginTop: 20, marginBottom: 10 }}>Tarifi değerlendir</Text>
-                        <StarRating
-                            maxStars={5}
-                            rating={userRating}
-                            selectedStar={(rating) => setUserRating(rating)}
-                            starSize={20}
-                            fullStarColor={'gold'}
-                        />
+                        
                         <Input
                             style={{ marginVertical: 10 }}
                             value={userComment}
                             onChangeText={(text) => setUserComment(text)}
                             placeholder="Yorumunuz"
                         />
-                        <Button style={{ marginBottom: 10, backgroundColor:"black"}} onPress={handleSubmit}>Yorumu gönder</Button>
+                        <Button style={{ marginBottom: 10, backgroundColor: "black" }} onPress={handleSubmit}>Yorumu gönder</Button>
                         <Text category='h5' style={{ marginTop: 20, marginBottom: 10 }}>Yorumlar</Text>
                         {selectedRecipe.comments && selectedRecipe.comments.slice(-numberOfCommentsToShow).map((comment, index) => (
                             <Layout key={index} style={{ borderBottomWidth: 1, borderBottomColor: '#ddd', paddingVertical: 10 }}>
                                 <Text category='h6'>{comment.username}</Text>
-                                <Text>{comment.comment}</Text>
+                                <Text >{comment.comment}</Text>
                             </Layout>
                         ))}
                     </Layout>

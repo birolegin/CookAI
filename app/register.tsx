@@ -2,7 +2,7 @@ import { View, KeyboardAvoidingView, TextInput, StyleSheet, Alert } from 'react-
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
 import React, { useState } from 'react'
 import { useRouter } from 'expo-router'
-import { FIREBASE_AUTH } from '../FirebaseConfig'
+import { FIREBASE_AUTH } from '../firebaseConfig'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 
 const Page = () => {
@@ -31,7 +31,7 @@ const Page = () => {
         route.replace("/")
     }
     return (
-        <Layout style={{ flex: 1, padding: 10, justifyContent: 'center' , backgroundColor : '#FFE7AF'}}>
+        <Layout style={{ flex: 1, padding: 10, justifyContent: 'center', backgroundColor: '#FFE7AF' }}>
             <KeyboardAvoidingView behavior='padding'>
                 <Text category='h3' style={{ padding: 10 }}>CookAI</Text>
 
@@ -53,16 +53,16 @@ const Page = () => {
                     autoCapitalize='none'
                     onChangeText={(text) => setPassword(text)}
                 />
-                
+
 
                 <Layout style={styles.buttonContainer}>
-                    <Button style={{ marginVertical: 10 , backgroundColor: "black"}} onPress={signUp}>Kayıt Ol</Button>
-                    <Button style={{ marginVertical: 10 , backgroundColor: "black"}} onPress={goBack}>Geri dön.</Button>
+                    <Button style={{ marginVertical: 10, backgroundColor: "black" }} onPress={signUp}>Kayıt Ol</Button>
+                    <Button style={{ marginVertical: 10, backgroundColor: "black" }} onPress={goBack}>Geri dön.</Button>
                 </Layout>
             </KeyboardAvoidingView>
-            
+
         </Layout>
-        
+
     )
 }
 
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginHorizontal: 40,
         backgroundColor: "#FFE7AF"
-        
+
     },
     title: {
         fontSize: 36,

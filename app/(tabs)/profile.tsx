@@ -10,7 +10,7 @@ import {
   Modal as KittenModal,
   Icon,
 } from "@ui-kitten/components";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { signOut, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import {
@@ -23,7 +23,7 @@ import {
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
-import { ScrollView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -172,196 +172,198 @@ const Page = () => {
 
   return (
     <Layout style={{ flex: 1, padding: 10, backgroundColor: "#FFE7AF" }}>
-      <ScrollView>
-        <Layout
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 20,
-            backgroundColor: "#FFE7AF",
-          }}
-        >
-          <Avatar
-            source={{ uri: user?.photoURL || "" }}
-            style={{ width: 75, height: 75, marginRight: 10 }}
-          />
-          <Text category="h5" style={{ flex: 1 }}>
-            {displayName}
-          </Text>
-        </Layout>
-
-        <Layout style={{ padding: 20, backgroundColor: "#FFE7AF" }}>
-          <Text category="h5" style={{ marginBottom: 10 }}>
-            Kullanıcı Bilgileri
-          </Text>
-          <Card
+      <GestureHandlerRootView>
+        <ScrollView>
+          <Layout
             style={{
-              marginBottom: 10,
-              padding: 10,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 20,
               backgroundColor: "#FFE7AF",
             }}
           >
-            <MaterialCommunityIcons
-              name="human-male-height"
-              size={32}
-              color="black"
+            <Avatar
+              source={{ uri: user?.photoURL || "" }}
+              style={{ width: 75, height: 75, marginRight: 10 }}
             />
-
-            <Text category="h6">BOY</Text>
-
-            <Text>{userDetails?.height || "-"} cm</Text>
-          </Card>
-          <Card
-            style={{
-              marginBottom: 10,
-              padding: 10,
-              backgroundColor: "#FFE7AF",
-              borderTopColor: "black",
-            }}
-          >
-            <MaterialCommunityIcons
-              name="weight-kilogram"
-              size={32}
-              color="black"
-            />
-            <Text category="h6">KİLO</Text>
-            <Text>{userDetails?.weight || "-"} kg</Text>
-          </Card>
-          <Card
-            style={{
-              marginBottom: 10,
-              padding: 10,
-              backgroundColor: "#FFE7AF",
-              borderTopColor: "black",
-            }}
-          >
-            <MaterialCommunityIcons name="human" size={32} color="black" />
-            <Text category="h6">VKİ</Text>
-            <Text>
-              {userDetails?.bmi || "-"} ({classifyBmi(userDetails?.bmi || "0")})
+            <Text category="h5" style={{ flex: 1 }}>
+              {displayName}
             </Text>
-          </Card>
-          <Card
-            style={{
-              marginBottom: 10,
-              padding: 10,
-              backgroundColor: "#FFE7AF",
-              borderBlockColor: "black",
-            }}
-          >
-            <MaterialCommunityIcons name="food" size={32} color="black" />
-            <Text category="h6">Günlük alması gereken kalori miktarı</Text>
-            <Text>{userDetails?.dailyCalories || "-"} kalori</Text>
-          </Card>
-        </Layout>
+          </Layout>
 
-        <KittenModal
-          visible={isDetailsModalVisible}
-          backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        >
-          <Card disabled>
-            <Text category="h6">Bilgileri güncelle</Text>
-            <Input
-              value={height}
-              onChangeText={setHeight}
-              placeholder="Boy (cm)"
-              keyboardType="numeric"
-            />
-            <Input
-              value={weight}
-              onChangeText={setWeight}
-              placeholder="Kilo (kg)"
-              keyboardType="numeric"
-            />
-            <Input
-              value={dailyCalories}
-              onChangeText={setDailyCalories}
-              placeholder="Günlük kalori ihtiyacı"
-              keyboardType="numeric"
-            />
-            <Button
-              style={{ backgroundColor: "black" }}
-              onPress={updateUserDetails}
+          <Layout style={{ padding: 20, backgroundColor: "#FFE7AF" }}>
+            <Text category="h5" style={{ marginBottom: 10 }}>
+              Kullanıcı Bilgileri
+            </Text>
+            <Card
+              style={{
+                marginBottom: 10,
+                padding: 10,
+                backgroundColor: "#FFE7AF",
+              }}
             >
-              Güncelle
-            </Button>
-            <Button
-              style={{ backgroundColor: "black" }}
-              onPress={closeDetailsModal}
-            >
-              Kapat
-            </Button>
-          </Card>
-        </KittenModal>
-
-        <Layout
-          style={{
-            padding: 20,
-            marginVertical: 10,
-            backgroundColor: "#FFE7AF",
-          }}
-        >
-          <Button
-            style={{ marginVertical: 5, backgroundColor: "black" }}
-            onPress={openDetailsModal}
-          >
-            Bilgileri güncelle
-          </Button>
-          <Button
-            style={{ marginVertical: 5, backgroundColor: "black" }}
-            onPress={() => route.push("/savedRecipes")}
-          >
-            Kaydedilen tarifler
-          </Button>
-          <Button
-            style={{ marginVertical: 5, backgroundColor: "black" }}
-            onPress={openModal}
-          >
-            Kullanıcı adı değiştir
-          </Button>
-          <Button
-            style={{ marginVertical: 5, backgroundColor: "black" }}
-            onPress={sendPasswordReset}
-          >
-            Şifre sıfırlama e-postası gönder
-          </Button>
-          <Button
-            style={{ marginVertical: 5, backgroundColor: "black" }}
-            onPress={logOut}
-          >
-            Çıkış Yap
-          </Button>
-        </Layout>
-
-        <KittenModal
-          visible={isModalVisible}
-          backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        >
-          <Card disabled>
-            <Layout style={{ padding: 10, marginVertical: 10 }}>
-              <Text category="h6">Kullanıcı adı değiştir</Text>
-              <Layout style={{ marginVertical: 5 }}></Layout>
-              <Input
-                value={name}
-                onChangeText={setName}
-                placeholder="Kullanıcı adı girin."
+              <MaterialCommunityIcons
+                name="human-male-height"
+                size={32}
+                color="black"
               />
-              <Layout style={{ marginVertical: 5 }}></Layout>
+
+              <Text category="h6">BOY</Text>
+
+              <Text >{userDetails?.height || "-"} cm</Text>
+            </Card>
+            <Card
+              style={{
+                marginBottom: 10,
+                padding: 10,
+                backgroundColor: "#FFE7AF",
+                borderTopColor: "black",
+              }}
+            >
+              <MaterialCommunityIcons
+                name="weight-kilogram"
+                size={32}
+                color="black"
+              />
+              <Text category="h6">KİLO</Text>
+              <Text >{userDetails?.weight || "-"} kg</Text>
+            </Card>
+            <Card
+              style={{
+                marginBottom: 10,
+                padding: 10,
+                backgroundColor: "#FFE7AF",
+                borderTopColor: "black",
+              }}
+            >
+              <MaterialCommunityIcons name="human" size={32} color="black" />
+              <Text category="h6">VKİ</Text>
+              <Text >
+                {userDetails?.bmi || "-"} ({classifyBmi(userDetails?.bmi || "0")})
+              </Text>
+            </Card>
+            <Card
+              style={{
+                marginBottom: 10,
+                padding: 10,
+                backgroundColor: "#FFE7AF",
+                borderBlockColor: "black",
+              }}
+            >
+              <MaterialCommunityIcons name="food" size={32} color="black" />
+              <Text category="h6">Günlük alması gereken kalori miktarı</Text>
+              <Text >{userDetails?.dailyCalories || "-"} kalori</Text>
+            </Card>
+          </Layout>
+
+          <KittenModal
+            visible={isDetailsModalVisible}
+            backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <Card disabled>
+              <Text category="h6">Bilgileri güncelle</Text>
+              <Input
+                value={height}
+                onChangeText={setHeight}
+                placeholder="Boy (cm)"
+                keyboardType="numeric"
+              />
+              <Input
+                value={weight}
+                onChangeText={setWeight}
+                placeholder="Kilo (kg)"
+                keyboardType="numeric"
+              />
+              <Input
+                value={dailyCalories}
+                onChangeText={setDailyCalories}
+                placeholder="Günlük kalori ihtiyacı"
+                keyboardType="numeric"
+              />
               <Button
                 style={{ backgroundColor: "black" }}
-                onPress={updateDisplayName}
+                onPress={updateUserDetails}
               >
-                Kullanıcı adı ayarla
+                Güncelle
               </Button>
-              <Layout style={{ marginVertical: 5 }}></Layout>
-              <Button style={{ backgroundColor: "black" }} onPress={closeModal}>
+              <Button
+                style={{ backgroundColor: "black" }}
+                onPress={closeDetailsModal}
+              >
                 Kapat
               </Button>
-            </Layout>
-          </Card>
-        </KittenModal>
-      </ScrollView>
+            </Card>
+          </KittenModal>
+
+          <Layout
+            style={{
+              padding: 20,
+              marginVertical: 10,
+              backgroundColor: "#FFE7AF",
+            }}
+          >
+            <Button
+              style={{ marginVertical: 5, backgroundColor: "black" }}
+              onPress={openDetailsModal}
+            >
+              Bilgileri güncelle
+            </Button>
+            <Button
+              style={{ marginVertical: 5, backgroundColor: "black" }}
+              onPress={() => route.push("/savedRecipes")}
+            >
+              Kaydedilen tarifler
+            </Button>
+            <Button
+              style={{ marginVertical: 5, backgroundColor: "black" }}
+              onPress={openModal}
+            >
+              Kullanıcı adı değiştir
+            </Button>
+            <Button
+              style={{ marginVertical: 5, backgroundColor: "black" }}
+              onPress={sendPasswordReset}
+            >
+              Şifre sıfırlama e-postası gönder
+            </Button>
+            <Button
+              style={{ marginVertical: 5, backgroundColor: "black" }}
+              onPress={logOut}
+            >
+              Çıkış Yap
+            </Button>
+          </Layout>
+
+          <KittenModal
+            visible={isModalVisible}
+            backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <Card disabled>
+              <Layout style={{ padding: 10, marginVertical: 10 }}>
+                <Text category="h6">Kullanıcı adı değiştir</Text>
+                <Layout style={{ marginVertical: 5 }}></Layout>
+                <Input
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="Kullanıcı adı girin."
+                />
+                <Layout style={{ marginVertical: 5 }}></Layout>
+                <Button
+                  style={{ backgroundColor: "black" }}
+                  onPress={updateDisplayName}
+                >
+                  Kullanıcı adı ayarla
+                </Button>
+                <Layout style={{ marginVertical: 5 }}></Layout>
+                <Button style={{ backgroundColor: "black" }} onPress={closeModal}>
+                  Kapat
+                </Button>
+              </Layout>
+            </Card>
+          </KittenModal>
+        </ScrollView>
+      </GestureHandlerRootView>
     </Layout>
   );
 };

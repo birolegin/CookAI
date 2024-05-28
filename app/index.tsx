@@ -15,14 +15,13 @@ import {
   signInWithCredential,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { FIREBASE_AUTH } from "../FirebaseConfig";
+import { FIREBASE_AUTH } from "../firebaseConfig";
 import {
   GoogleSignin,
   GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
 import { Layout, Text, Input, Button, Card } from "@ui-kitten/components";
 import { LogBox } from "react-native"
-
 
 const Page = () => {
   const route = useRouter();
@@ -35,7 +34,6 @@ const Page = () => {
     GoogleSignin.configure({
       webClientId:
         "892809679715-fenqeqgeco7297fiaphpejpon1j16s0a.apps.googleusercontent.com",
-      offlineAccess: true,
     });
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -76,7 +74,7 @@ const Page = () => {
       console.error(error);
     }
   };
-  
+
   LogBox.ignoreAllLogs(true)
 
   return (
