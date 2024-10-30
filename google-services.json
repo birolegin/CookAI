@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "892809679715",
+    "project_id": "cookai-bf772",
+    "storage_bucket": "cookai-bf772.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892809679715:android:b108b65c531dab812a7956",
+        "android_client_info": {
+          "package_name": "com.cookai.cookaiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892809679715-mu1meu3cjb4ndfupjj0tu1skr5q8vsgd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cookai.cookaiapp",
+            "certificate_hash": "12f7921645ad0e220f3d785ce3245ec907343e4d"
+          }
+        },
+        {
+          "client_id": "892809679715-fenqeqgeco7297fiaphpejpon1j16s0a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdn79E3N8c9mEMViN6u4KrXT0SIlbvRig"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "892809679715-fenqeqgeco7297fiaphpejpon1j16s0a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "892809679715-ehblpm5a9ocqour6udn6n7r7pjc092c8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cookai.cookaiapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
